@@ -17,4 +17,6 @@ public class NumNode extends Node
     public int getPayload() {
         return payload;
     }
+
+
 }
