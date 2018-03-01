@@ -9,7 +9,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_main);2
 
         //"10+3-2" -> turn into a queue of NumNodes and OpNodes
         Queue q = new Queue();
@@ -63,38 +63,59 @@ public class MainActivity extends AppCompatActivity {
             if(digits.indexOf(s.charAt(i)) != -1)
             {
                 currNumber = currNumber + s.charAt(i);
+
             }
             else
             {
-                this.q.enqueue(Integer.parseInt(currNumber));
+                if (this.q.enqueue = 0)
+                {
+                    this.q.enqueue(Integer.parseInt(currNumber));
+                }
+                else
+                {
+                    String ind = this.q.enqueue;
+                    if (ind.charAt(currNumber) = digits)
+                    {
+                        this.polishET.setText("" + currNumber);
+                    }
+                    else if (ind == '+' || ind == '-')
+                    {
+                        if (currNumber == '/' || currNumber == 'x')
+                        {
+                            this.polishET.setText("" +currNumber);
+                        }
+                    }
+                    else if (ind == 'x' || '/')
+                    {
+                        if (currNumber == '+' || currNumber == '-')
+                        {
+                            this.polishET.setText("" +currNumber);
+                    }
+                    else
+                    {
+                        if (ind == currNumber)
+                        {
+                            this.polishET.setText("" + currNumber);
+                            currNumber = currNumber+1;
+                        }
+                    }
+
+                    }
+                }
+
                 currNumber = "";
                 this.q.enqueue(s.charAt(i));
             }
         }
         this.q.enqueue(Integer.parseInt(currNumber));
         this.testQ();
+
+
     }
 
-    private void parseStringTok(String s)
-    {
-        StringTokenizer st = new StringTokenizer(s,"+-*/", true);
-        String temp;
-        String ops = "+-*/";
-        while(st.hasMoreTokens())
-        {
-            temp = st.nextToken().trim();
-            if(ops.indexOf(temp.charAt(0)) == -1)
-            {
-                this.q.enqueue(Integer.parseInt(temp));
-            }
-            else
-            {
-                //"+" -> '+'
-                this.q.enqueue(temp.charAt(0));
-            }
-        }
-        this.testQ();
-    }
+
+
+
 
     public void onClickMeButtonPressed(View v)
     {
@@ -103,7 +124,8 @@ public class MainActivity extends AppCompatActivity {
         this.parseStringTok(inputET.getText().toString());
     }
 
-    
+
+
 
 
 }
