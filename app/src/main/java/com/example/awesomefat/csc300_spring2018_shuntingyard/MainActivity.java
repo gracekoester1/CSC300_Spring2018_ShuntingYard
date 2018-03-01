@@ -23,29 +23,87 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-    public int detect()
+    private String removeSpaces(String s)
     {
-
-        int num;
-        String temp = "";
-        String q = q.getText().toString();
-        for(int i = 0; i < q.length(); i++)
+        String answer = "";
+        for(int i = 0; i < s.length(); i++)
         {
-            if(i == char)
+            if(s.charAt(i) != ' ')
             {
-                this.charBox.setText(i);
+                answer = answer + s.charAt(i);
             }
-            else if(i == int)
-
-            {
-           this.intBox.setText(i);
-             }
-
-             catch(Exception e)
-            {
-                Toast.makeText(this, e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
-            }
-
+        }
+        return answer;
     }
+
+    private void testQ()
+    {
+        while(!this.q.isEmpty())
+        {
+            Node n = this.q.dequeue();
+            if(n instanceof NumNode)
+            {
+                NumNode temp = (NumNode)n;
+                System.out.println(temp.getPayload());
+            }
+            else
+            {
+                OpNode temp = (OpNode)n;
+                System.out.println(temp.getPayload());
+            }
+        }
+    }
+
+    private void parseString(String s)
+    {
+        String currNumber = "";
+        String digits = "0123456789";
+        for(int i = 0; i < s.length(); i++)
+        {
+            if(digits.indexOf(s.charAt(i)) != -1)
+            {
+                currNumber = currNumber + s.charAt(i);
+            }
+            else
+            {
+                this.q.enqueue(Integer.parseInt(currNumber));
+                currNumber = "";
+                this.q.enqueue(s.charAt(i));
+            }
+        }
+        this.q.enqueue(Integer.parseInt(currNumber));
+        this.testQ();
+    }
+
+    private void parseStringTok(String s)
+    {
+        StringTokenizer st = new StringTokenizer(s,"+-*/", true);
+        String temp;
+        String ops = "+-*/";
+        while(st.hasMoreTokens())
+        {
+            temp = st.nextToken().trim();
+            if(ops.indexOf(temp.charAt(0)) == -1)
+            {
+                this.q.enqueue(Integer.parseInt(temp));
+            }
+            else
+            {
+                //"+" -> '+'
+                this.q.enqueue(temp.charAt(0));
+            }
+        }
+        this.testQ();
+    }
+
+    public void onClickMeButtonPressed(View v)
+    {
+        EditText inputET = (EditText)this.findViewById(R.id.inputET);
+        String valueWithoutSpaces = this.removeSpaces(inputET.getText().toString());
+        this.parseStringTok(inputET.getText().toString());
+    }
+
+    
+
 
 }

@@ -17,4 +17,6 @@ public class OpNode extends Node
     public char getPayload() {
         return payload;
     }
+
+
 }

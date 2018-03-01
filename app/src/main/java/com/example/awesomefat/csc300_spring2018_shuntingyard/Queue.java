@@ -16,55 +16,84 @@ public class Queue
     }
 
     //Polymorphism
-    private void enqueue(Node n)
+    private String removeSpaces(String s)
     {
-        if(this.end == null)
+        String answer = "";
+        for(int i = 0; i < s.length(); i++)
         {
-            this.end = n;
-        }
-        else
-        {
-            this.end.setNextNode(n);
-            this.end = n;
-        }
-        if(this.front == null)
-        {
-            this.front = this.end;
-        }
-    }
-
-    public void enqueue(char payload)
-    {
-        OpNode on = new OpNode(payload);
-        this.enqueue(on);
-    }
-
-    public void enqueue(int payload)
-    {
-        NumNode nn = new NumNode(payload);
-        this.enqueue(nn);
-    }
-
-    public Node dequeue()
-    {
-        if(this.front == null)
-        {
-            return this.front;
-        }
-        else
-        {
-            Node node2Return = this.front;
-            if(this.end == this.front)
+            if(s.charAt(i) != ' ')
             {
-                this.front = null;
-                this.end = null;
+                answer = answer + s.charAt(i);
+            }
+        }
+        return answer;
+    }
+
+    private void testQ()
+    {
+        while(!this.q.isEmpty())
+        {
+            Node n = this.q.dequeue();
+            if(n instanceof NumNode)
+            {
+                NumNode temp = (NumNode)n;
+                System.out.println(temp.getPayload());
             }
             else
             {
-                this.front = this.front.getNextNode();
-                node2Return.setNextNode(null);
+                OpNode temp = (OpNode)n;
+                System.out.println(temp.getPayload());
             }
-            return node2Return;
         }
     }
+
+    private void parseString(String s)
+    {
+        String currNumber = "";
+        String digits = "0123456789";
+        for(int i = 0; i < s.length(); i++)
+        {
+            if(digits.indexOf(s.charAt(i)) != -1)
+            {
+                currNumber = currNumber + s.charAt(i);
+            }
+            else
+            {
+                this.q.enqueue(Integer.parseInt(currNumber));
+                currNumber = "";
+                this.q.enqueue(s.charAt(i));
+            }
+        }
+        this.q.enqueue(Integer.parseInt(currNumber));
+        this.testQ();
+    }
+
+    private void parseStringTok(String s)
+    {
+        StringTokenizer st = new StringTokenizer(s,"+-*/", true);
+        String temp;
+        String ops = "+-*/";
+        while(st.hasMoreTokens())
+        {
+            temp = st.nextToken().trim();
+            if(ops.indexOf(temp.charAt(0)) == -1)
+            {
+                this.q.enqueue(Integer.parseInt(temp));
+            }
+            else
+            {
+                //"+" -> '+'
+                this.q.enqueue(temp.charAt(0));
+            }
+        }
+        this.testQ();
+    }
+
+    public void onClickMeButtonPressed(View v)
+    {
+        EditText inputET = (EditText)this.findViewById(R.id.inputET);
+        String valueWithoutSpaces = this.removeSpaces(inputET.getText().toString());
+        this.parseStringTok(inputET.getText().toString());
+    }
+
 }
